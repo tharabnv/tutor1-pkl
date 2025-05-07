@@ -15,6 +15,7 @@ class Industri extends Model
         'alamat',
         'kontak',
         'email',
+        'website',
     ];
 
     public function pkls()

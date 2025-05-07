@@ -13,8 +13,8 @@ class GuruFactory extends Factory
             'nip'    => fake()->unique()->numerify('1980#######'),
             'gender' => fake()->randomElement(['L', 'P']),
             'alamat' => fake()->address(),
-            'kontak' => fake()->phoneNumber(),
-            'email'  => fake()->unique()->safeEmail(),
+            'kontak' => fake()->numerify('###########'), // batasin digit
+            'email' => fake()->unique()->safeEmailDomain('gurusija.com'),
         ];
     }
 }

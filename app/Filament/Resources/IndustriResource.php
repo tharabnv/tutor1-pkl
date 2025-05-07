@@ -33,12 +33,19 @@ class IndustriResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('kontak')
-                    ->numeric()
                     ->required()
-                    ->rule('regex:/^[0-9]+$/'),  
+                    ->maxLength(20) // batas input total karakter
+                    ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
+                    ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
+                    ->label('Kontak'),  
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('website')
+                    ->label('Website')
+                    ->url() // validasi agar input berupa URL
+                    ->nullable()
                     ->maxLength(255),
             ]);
     }
@@ -57,6 +64,14 @@ class IndustriResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('website')
+                    ->label('Website')
+                    ->url(fn ($record) => $record->website, true) // bikin jadi link aktif
+                    ->openUrlInNewTab() // buka tab baru
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => \Str::limit($state, 30)) // tampilkan max 30 karakter,
+                    ->color('info') // ubah warna menjadi biru
+                    ->wrap(), // biar nggak kepotong di satu baris
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

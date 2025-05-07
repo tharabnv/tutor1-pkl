@@ -26,23 +26,25 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
+
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->label('Password')
+                    ->required(fn (string $context): bool => $context === 'create') // required saat create saja
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)) // hash otomatis
+                    ->dehydrated(fn ($state) => filled($state)) // disimpan hanya kalau diisi
+                    ->maxLength(255),
+
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
-                    ->preload(),
-                // Forms\Components\DateTimePicker::make('email_verified_at'),
-                // Forms\Components\TextInput::make('password')
-                //     ->password()
-                //     ->required()
-                //     ->maxLength(255),
-                // Forms\Components\Textarea::make('two_factor_secret')
-                //     ->columnSpanFull(),
-                // Forms\Components\Textarea::make('two_factor_recovery_codes')
-                //     ->columnSpanFull(),
-                // Forms\Components\DateTimePicker::make('two_factor_confirmed_at'),
+                    ->preload()
+                    ->searchable()
+                    ->label('Role'),
             ]);
     }
 

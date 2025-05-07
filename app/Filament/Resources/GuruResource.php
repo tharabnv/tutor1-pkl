@@ -39,13 +39,21 @@ class GuruResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('kontak')
-                    ->numeric()
                     ->required()
-                    ->rule('regex:/^[0-9]+$/'),                
+                    ->maxLength(20) // batas input total karakter
+                    ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
+                    ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
+                    ->label('Kontak'),
+                    // ->numeric()
+                    // ->required()
+                    // ->rule('regex:/^[0-9]+$/'),                
                 Forms\Components\TextInput::make('email')
-                    ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->email()
+                    ->maxLength(255)
+                    ->rule('regex:/^[\w.+-]+@gurusija\.com$/') // hanya email @gurusija.com
+                    ->label('Email (@gurusija.com)')
+                    ->helperText('Hanya gunakan email @gurusija.com'),
             ]);
     }
 

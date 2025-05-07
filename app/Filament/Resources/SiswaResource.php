@@ -39,9 +39,11 @@ class SiswaResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('kontak')
-                    ->numeric()
                     ->required()
-                    ->rule('regex:/^[0-9]+$/'),  
+                    ->maxLength(20) // batas input total karakter
+                    ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
+                    ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
+                    ->label('Kontak'),  
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
