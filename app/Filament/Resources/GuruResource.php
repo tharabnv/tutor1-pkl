@@ -12,6 +12,12 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\FileUpload;
+use Maatwebsite\Excel\Facades\Excel; //untuk import excel
+use App\Imports\GuruImport; //import dari guru import
+use Illuminate\Support\Facades\Storage;
+use Filament\Notifications\Notification; //import buat notifikasi kalo berhasil
 
 class GuruResource extends Resource
 {
@@ -81,6 +87,7 @@ class GuruResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            
             ->filters([
                 //
             ])
@@ -92,6 +99,28 @@ class GuruResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                Action::make('Import CSV')
+                    ->label('Import CSV')
+                    ->form([
+                        FileUpload::make('file')
+                            ->label('Pilih CSV')
+                            ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel'])
+                            ->disk('public')
+                            ->directory('uploads')
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        $filePath = storage_path('app/public/' . $data['file']);
+                        Excel::import(new GuruImport, $filePath);
+                        Storage::disk('public')->delete($data['file']);
+
+                        Notification::make()
+                            ->title('Data guru berhasil diimpor!')
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 

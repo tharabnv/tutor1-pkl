@@ -102,7 +102,7 @@ class IndustriResource extends Resource
         ];
     }
     
-    //mengganti nama navigation di tampilan (sebelah kiri bawah dashboard)
+    //mengganti nama Industris, navigation di tampilan (sebelah kiri bawah dashboard)
     public static function getNavigationLabel(): string
     {
         return 'Data Industri'; // get navigation

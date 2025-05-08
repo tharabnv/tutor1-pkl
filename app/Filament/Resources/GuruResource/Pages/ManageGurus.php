@@ -13,7 +13,13 @@ class ManageGurus extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Guru'), // Ganti teks tombol di sini
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return 'Data Guru'; // Opsional: ganti judul halaman
     }
 }

@@ -13,7 +13,13 @@ class ManageSiswas extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Siswa'), // Ganti teks tombol di sini
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return 'Data Siswa'; // Opsional: ganti judul halaman
     }
 }

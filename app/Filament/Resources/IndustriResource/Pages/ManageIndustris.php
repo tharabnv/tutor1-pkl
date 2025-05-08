@@ -13,7 +13,14 @@ class ManageIndustris extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Industri'), // Ganti teks tombol di sini
         ];
     }
+
+    public function getTitle(): string
+    {
+        return 'Data Industri'; // Opsional: ganti judul halaman
+    }
+    
 }

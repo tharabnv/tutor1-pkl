@@ -13,7 +13,26 @@ class ManagePkls extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Data PKL'), // Ganti teks tombol di sini
+        ];
+    }
+
+    public function getTitle(): string
+    {
+        return 'Data Praktik Kerja Lapangan'; // Opsional: ganti judul halaman
+    }
+
+    protected function getFooterActions(): array
+    {
+        return [
+            Actions\Action::make('export')
+                ->label('Unduh Semua Data')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+                ->action(function () {
+                    return Excel::download(new PklExport, 'data-pkl.xlsx');
+                }),
         ];
     }
 }

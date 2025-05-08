@@ -12,6 +12,12 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\FileUpload;
+use Maatwebsite\Excel\Facades\Excel; //untuk import excel
+use App\Imports\SiswaImport; //import dari guru import
+use Illuminate\Support\Facades\Storage;
+use Filament\Notifications\Notification; //import buat notifikasi kalo berhasil
 
 class SiswaResource extends Resource
 {
@@ -80,9 +86,9 @@ class SiswaResource extends Resource
                     ->searchable(),
                 Tables\Columns\IconColumn::make('status_pkl')
                     ->boolean(),
-                    Tables\Columns\ImageColumn::make('foto')
-                    ->disk('public') // sesuai dengan storage:link
-                    ->height(50)
+                Tables\Columns\ImageColumn::make('foto')
+                    ->disk('public') //menyimpan sesuai dengan storage:link di disk publik
+                    ->height(50) //menampilkan gambar dengan tinggi 50 piksel
                     ->circular()               
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -105,6 +111,29 @@ class SiswaResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                
+            ])
+            ->headerActions([
+                Action::make('Import CSV')
+                    ->label('Import CSV')
+                    ->form([
+                        FileUpload::make('file')
+                            ->label('Pilih CSV')
+                            ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel'])
+                            ->disk('public')
+                            ->directory('uploads')
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        $filePath = storage_path('app/public/' . $data['file']);
+                        Excel::import(new SiswaImport, $filePath);
+                        Storage::disk('public')->delete($data['file']);
+
+                        Notification::make()
+                            ->title('Data siswa berhasil diimpor!')
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 
