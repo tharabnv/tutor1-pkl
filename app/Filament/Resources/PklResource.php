@@ -27,10 +27,12 @@ class PklResource extends Resource
         return $form
         ->schema([
             Forms\Components\Select::make('siswa_id')
+                ->label('Siswa')
                 ->relationship('siswa', 'nama')
                 ->searchable()
                 ->preload()
-                ->required(),
+                ->required()
+                ->unique(ignoreRecord: true), // penting untuk proses edit
             Forms\Components\Select::make('industri_id')
                 ->relationship('industri', 'nama')
                 ->searchable()

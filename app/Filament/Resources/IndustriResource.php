@@ -24,8 +24,29 @@ class IndustriResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
-                    ->required()
-                    ->maxLength(255),
+    ->required()
+    ->maxLength(255)
+    ->label('Nama Industri')
+    ->rule(function () {
+        return function (string $attribute, $value, \Closure $fail) {
+            $normalizedInput = strtolower(preg_replace('/\s+/', '', $value));
+
+            $industriList = \App\Models\Industri::all();
+
+            foreach ($industriList as $industri) {
+                $normalizedExisting = strtolower(preg_replace('/\s+/', '', $industri->nama));
+
+                // Cek apakah input mengandung nama lama, atau sebaliknya
+                if (
+                    str_contains($normalizedInput, $normalizedExisting) ||
+                    str_contains($normalizedExisting, $normalizedInput)
+                ) {
+                    $fail("Nama industri sudah ada: '{$industri->nama}'.");
+                    break;
+                }
+            }
+        };
+    }),
                 Forms\Components\TextInput::make('bidang_usaha')
                     ->required()
                     ->maxLength(255),
@@ -35,8 +56,8 @@ class IndustriResource extends Resource
                 Forms\Components\TextInput::make('kontak')
                     ->required()
                     ->maxLength(20) // batas input total karakter
-                    ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
-                    ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
+                    // ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
+                    // ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
                     ->label('Kontak'),  
                 Forms\Components\TextInput::make('email')
                     ->email()
