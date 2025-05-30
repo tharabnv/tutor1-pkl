@@ -24,10 +24,10 @@ class IndustriResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
-    ->required()
-    ->maxLength(255)
-    ->label('Nama Industri')
-    ->rule(function () {
+                ->required()
+                ->maxLength(255)
+                ->label('Nama Industri')
+                ->rule(function () {
         return function (string $attribute, $value, \Closure $fail) {
             $normalizedInput = strtolower(preg_replace('/\s+/', '', $value));
 
