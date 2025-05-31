@@ -21,7 +21,7 @@ class Create extends Component
         ]);
 
         if (Pkl::where('siswa_id', $this->siswa_id)->exists()) {
-            session()->flash('error', 'Siswa ini sudah melaporkan PKL.');
+            session()->flash('error', 'Siswa ini sudah melapor PKL.');
             return redirect()->route('pkl.index');
         }
 
