@@ -61,9 +61,10 @@ class PklResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('guru.nama')
-                    ->numeric()
+                    ->label('Guru Pembimbing')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->placeholder('Belum ditentukan'),
                 Tables\Columns\TextColumn::make('mulai')
                     ->date()
                     ->sortable()

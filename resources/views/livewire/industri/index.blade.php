@@ -3,6 +3,13 @@
 
     <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Industri</h2>
 
+    <div class="flex justify-end mb-4">
+        <a href="{{ route('industri.create') }}" 
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+        Tambah Industri
+        </a>
+    </div>
+
     <div class="overflow-x-auto">
       <table class="min-w-full text-sm text-left text-gray-700 border border-gray-300">
         <thead class="bg-gray-200 text-gray-700 font-medium">

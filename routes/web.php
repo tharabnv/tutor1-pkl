@@ -7,6 +7,9 @@ use App\Models\Pkl;
 use App\Models\Industri;
 use App\Livewire\Pkl\Index as PklIndex;
 use App\Livewire\Industri\Index as IndustriIndex;
+use App\Livewire\Industri\Create as IndustriCreate;
+use App\Livewire\Pkl\Create as PklCreate;
+use App\Models\Siswa;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +19,8 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'check_user_role',
+    'role:Siswa',
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -24,6 +29,8 @@ Route::middleware([
     // route untuk mengakses component product/Index
     Route::get('/pkl', App\Livewire\Pkl\Index::class)->name('pkl.index');
     Route::get('/industri', IndustriIndex::class)->name('industri.index');
+    Route::get('/pkl/create', PklCreate::class)->name('pkl.create');
+    Route::get('/industri/create', IndustriCreate::class)->name('industri.create');
 });
 
 // Route::view('/siswa', 'siswa', ['siswa' => Siswa::all()])->name('siswa');
