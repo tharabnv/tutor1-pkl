@@ -105,35 +105,27 @@ class SiswaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-                
-            ])
-            ->headerActions([
-                Action::make('Import CSV')
-                    ->label('Import CSV')
-                    ->form([
-                        FileUpload::make('file')
-                            ->label('Pilih CSV')
-                            ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel'])
-                            ->disk('public')
-                            ->directory('uploads')
-                            ->required(),
-                    ])
-                    ->action(function (array $data) {
-                        $filePath = storage_path('app/public/' . $data['file']);
-                        Excel::import(new SiswaImport, $filePath);
-                        Storage::disk('public')->delete($data['file']);
+                Tables\Actions\Action::make('delete') //biar siswa yang sdh lapor pkl tidak bisa dihapus di siswa karena berelasi sm pkl
+                ->label('Delete')
+                ->color('danger')
+                ->icon('heroicon-o-trash')
+                ->requiresConfirmation()
+                ->action(function (Siswa $record) {
+                    if ($record->pkl()->exists()) {
+                        Notification::make()
+                            ->title('Gagal menghapus')
+                            ->body('Siswa ini sudah melapor PKL dan tidak bisa dihapus.')
+                            ->danger()
+                            ->send();
+                    } else {
+                        $record->delete();
 
                         Notification::make()
-                            ->title('Data siswa berhasil diimpor!')
+                            ->title('Berhasil dihapus')
                             ->success()
                             ->send();
-                    }),
+                    }
+                }),
             ]);
     }
 

@@ -20,56 +20,42 @@ class IndustriResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('nama')
+{
+    return $form
+        ->schema([
+            Forms\Components\TextInput::make('nama')
+                ->label('Nama Industri')
                 ->required()
                 ->maxLength(255)
-                ->label('Nama Industri')
-                ->rule(function () {
-        return function (string $attribute, $value, \Closure $fail) {
-            $normalizedInput = strtolower(preg_replace('/\s+/', '', $value));
+                // Pake unique built-in Laravel/Filament
+                // ignoreRecord: true supaya saat edit data yang sama tidak kena validasi
+                ->unique(table: Industri::class, column: 'nama', ignoreRecord: true),
 
-            $industriList = \App\Models\Industri::all();
+            Forms\Components\TextInput::make('bidang_usaha')
+                ->required()
+                ->maxLength(255),
 
-            foreach ($industriList as $industri) {
-                $normalizedExisting = strtolower(preg_replace('/\s+/', '', $industri->nama));
+            Forms\Components\TextInput::make('alamat')
+                ->required()
+                ->maxLength(255),
 
-                // Cek apakah input mengandung nama lama, atau sebaliknya
-                if (
-                    str_contains($normalizedInput, $normalizedExisting) ||
-                    str_contains($normalizedExisting, $normalizedInput)
-                ) {
-                    $fail("Nama industri sudah ada: '{$industri->nama}'.");
-                    break;
-                }
-            }
-        };
-    }),
-                Forms\Components\TextInput::make('bidang_usaha')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('alamat')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('kontak')
-                    ->required()
-                    ->maxLength(20) // batas input total karakter
-                    // ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
-                    // ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
-                    ->label('Kontak'),  
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('website')
-                    ->label('Website')
-                    ->url() // validasi agar input berupa URL
-                    ->nullable()
-                    ->maxLength(255),
-            ]);
-    }
+            Forms\Components\TextInput::make('kontak')
+                ->label('Kontak')
+                ->required()
+                ->maxLength(20),
+
+            Forms\Components\TextInput::make('email')
+                ->email()
+                ->required()
+                ->maxLength(255),
+
+            Forms\Components\TextInput::make('website')
+                ->label('Website')
+                ->url()
+                ->nullable()
+                ->maxLength(255),
+        ]);
+}
 
     public static function table(Table $table): Table
     {

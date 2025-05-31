@@ -6,10 +6,17 @@ use App\Models\Pkl;
 use App\Models\Siswa;
 use App\Models\Industri;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class Create extends Component
 {
-    public $siswa_id, $industri_id, $mulai, $selesai;
+    public $siswa_id, 
+           $industri_id, 
+           $mulai, 
+           $selesai, 
+           $siswas, 
+           $industris, 
+           $siswaList;
     
     public function save()
     {
@@ -48,4 +55,21 @@ class Create extends Component
     {
         return redirect()->route('pkl.index'); // sesuaikan path view-nya
     }
+
+    public function mount()
+    {
+        $userEmail = Auth::user()->email;
+
+        // Hanya ambil siswa yang email-nya sama dengan user yang login
+        $this->siswaList = Siswa::where('email', $userEmail)->get();
+
+        // Ambil semua industri untuk dropdown industri
+        $this->industris = Industri::all();
+
+        // Jika hanya satu siswa ditemukan, otomatis isi $siswa_id-nya
+        if ($this->siswaList->count() === 1) {
+            $this->siswa_id = $this->siswaList->first()->id;
+        }
+    }
+
 }
