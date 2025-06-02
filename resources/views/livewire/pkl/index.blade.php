@@ -50,7 +50,7 @@
             <td class="px-3 py-2 border-b">{{ $pkls->firstItem() + $index }}</td>
             <td class="px-3 py-2 border-b">{{ $pkl->siswa->nama }}</td>
             <td class="px-3 py-2 border-b">{{ $pkl->industri->nama }}</td>
-            <td class="px-3 py-2 border-b">
+            <td class="px-3 py-2 border-b {{ $pkl->guru ? '' : 'text-gray-400 italic' }}">
               {{ $pkl->guru ? $pkl->guru->nama : 'Belum ditentukan' }}
             </td>
             <td class="px-3 py-2 border-b">{{ $pkl->mulai }}</td>

@@ -103,6 +103,29 @@ class SiswaResource extends Resource
             ->filters([
                 //
             ])
+            ->headerActions([
+                Action::make('Import CSV')
+                    ->label('Import CSV')
+                    ->form([
+                        FileUpload::make('file')
+                            ->label('Pilih CSV')
+                            ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel'])
+                            ->disk('public')
+                            ->directory('uploads')
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        $filePath = storage_path('app/public/' . $data['file']);
+                        Excel::import(new SiswaImport, $filePath);
+                        Storage::disk('public')->delete($data['file']);
+
+                        Notification::make()
+                            ->title('Data siswa berhasil diimpor!')
+                            ->success()
+                            ->send();
+                    }),
+            ])
+
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('delete') //biar siswa yang sdh lapor pkl tidak bisa dihapus di siswa karena berelasi sm pkl
