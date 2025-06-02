@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Notifications\Notification; //import buat notifikasi kalo berhasil
+use Filament\Tables\Actions\DeleteAction;
 
 class IndustriResource extends Resource
 {
@@ -93,7 +95,19 @@ class IndustriResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->before(function ($record, $action) {
+                    if ($record->pkls()->exists()) {
+                        Notification::make()
+                            ->title('Gagal Menghapus')
+                            ->body('Industri ini sudah digunakan dalam data PKL dan tidak bisa dihapus.')
+                            ->danger()
+                            ->persistent() // biar nggak hilang sendiri
+                            ->send();
+
+                        $action->cancel(); // hentikan proses delete tanpa error 500
+                    }
+                })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

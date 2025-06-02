@@ -88,26 +88,13 @@ class PklResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                // Action::make('export')
-                //     ->label('Export Excel')
-                //     ->icon('heroicon-o-arrow-down-tray')
-                //     ->action(function () {
-                //         return Excel::download(new PklExport, 'data-pkl.xlsx');
-                //     }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->headerActions([
-                Action::make('export-all')
-                    ->label('Unduh Semua Data')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->color('success')
-                    ->action(function () {
-                        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PklExport, 'data-pkl.xlsx');
-                    }),
             ]);
     }
 

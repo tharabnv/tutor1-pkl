@@ -7,6 +7,8 @@ use App\Models\Siswa;
 use App\Models\Industri;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class Create extends Component
 {
@@ -30,6 +32,17 @@ class Create extends Component
         if (Pkl::where('siswa_id', $this->siswa_id)->exists()) {
             session()->flash('error', 'Siswa ini sudah melapor PKL.');
             return redirect()->route('pkl.index');
+        }
+        
+        // Validasi durasi minimal 90 hari
+        $start = Carbon::parse($this->mulai);
+        $end   = Carbon::parse($this->selesai);
+        $durasi = $start->diffInDays($end);
+
+        if ($durasi < 90) {
+            // Tambahkan error pada field 'selesai'
+            $this->addError('selesai', 'Durasi PKL minimal harus 90 hari (saat ini '.$durasi.' hari).');
+            return; // jangan redirect, biarkan tetap di form
         }
 
         Pkl::create([

@@ -2,6 +2,19 @@
     <div class="bg-white shadow-md rounded-lg p-6">
         <h2 class="text-2xl font-bold mb-6">Lapor Praktik Kerja Lapangan</h2>
 
+        {{-- Flash Message untuk success / error umum --}}
+        @if (session()->has('success'))
+            <div class="mb-4 px-4 py-3 bg-green-100 text-green-700 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="mb-4 px-4 py-3 bg-red-100 text-red-700 rounded">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <form wire:submit.prevent="save">
             {{-- Nama Siswa --}}
             <div class="mb-4">
@@ -12,7 +25,9 @@
                         <option value="{{ $siswa->id }}">{{ $siswa->nama }}</option>
                     @endforeach
                 </select>
-                @error('siswa_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                @error('siswa_id')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- Industri --}}
@@ -24,28 +39,50 @@
                         <option value="{{ $industri->id }}">{{ $industri->nama }}</option>
                     @endforeach
                 </select>
-                @error('industri_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                @error('industri_id')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
-            {{-- Tanggal PKL --}}
+            {{-- Mulai --}}
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Mulai</label>
-                <input type="date" wire:model="mulai" class="w-full border border-gray-300 rounded-md px-3 py-2">
-                @error('mulai') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <input
+                    type="date"
+                    wire:model="mulai"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2"
+                >
+                @error('mulai')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
+            {{-- Selesai --}}
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Selesai</label>
-                <input type="date" wire:model="selesai" class="w-full border border-gray-300 rounded-md px-3 py-2">
-                @error('selesai') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <input
+                    type="date"
+                    wire:model="selesai"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2"
+                >
+                @error('selesai')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- Tombol --}}
             <div class="flex justify-end">
-                <button type="button" wire:click="cancel" class="mr-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                <button
+                    type="button"
+                    wire:click="cancel"
+                    class="mr-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                >
                     Cancel
                 </button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
                     Save
                 </button>
             </div>

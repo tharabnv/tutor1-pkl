@@ -23,7 +23,11 @@ Route::middleware([
     'role:Siswa',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('dashboard', [
+            'jumlahSiswa' => Siswa::count(),
+            'jumlahIndustri' => Industri::count(),
+            'jumlahSudahLapor' => Pkl::count(),
+        ]);
     })->name('dashboard');
 
     // route untuk mengakses component product/Index
