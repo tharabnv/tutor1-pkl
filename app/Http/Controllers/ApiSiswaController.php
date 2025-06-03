@@ -28,7 +28,7 @@ class ApiSiswaController extends Controller
         $siswa->alamat = $request->alamat;
         $siswa->kontak = $request->kontak;
         $siswa->email = $request->email;
-        $siswa->status_lapor_pkl = $request->status_lapor_pkl;
+        $siswa->status_pkl = $request->status_pkl;
         $siswa->foto = $request->foto; 
         $siswa->save(); 
         return response()->json($siswa, 200);      
@@ -55,7 +55,7 @@ class ApiSiswaController extends Controller
         $siswa->alamat = $request->alamat;
         $siswa->kontak = $request->kontak;
         $siswa->email = $request->email;
-        $siswa->status_lapor_pkl = $request->status_lapor_pkl;
+        $siswa->status_pkl = $request->status_pkl;
         $siswa->foto = $request->foto; 
         $siswa->save(); 
         return response()->json($siswa, 200);      
