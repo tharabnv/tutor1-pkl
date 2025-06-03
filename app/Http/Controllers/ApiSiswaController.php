@@ -67,7 +67,7 @@ class ApiSiswaController extends Controller
     public function destroy(string $id)
     {
         Siswa::destroy($id);
-        return response()->json(["message"=>"deleted"], 200);      
+        return response()->json(["message"=>"Data berhasil terhapus"], 200);      
 
     }
 }

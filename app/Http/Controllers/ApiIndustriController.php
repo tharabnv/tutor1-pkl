@@ -63,6 +63,6 @@ class ApiIndustriController extends Controller
     public function destroy(string $id)
     {
         Industri::destroy($id);
-        return response()->json(["message"=>"Deleted"], 200);
+        return response()->json(["message"=>"Data berhasil terhapus"], 200);
     }
 }

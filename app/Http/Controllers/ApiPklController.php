@@ -71,6 +71,6 @@ class ApiPklController extends Controller
         // 6. method untuk respon proses hapus data pkl
 
         Pkl::destroy($id);
-        return response()->json(["message"=>"behasil terhapus"], 200);
+        return response()->json(["message"=>"Data behasil dihapus"], 200);
     }
 }
