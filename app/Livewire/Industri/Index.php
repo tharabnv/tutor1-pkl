@@ -23,6 +23,7 @@ class Index extends Component
                 ->orWhere('kontak', 'like', '%' . $this->search . '%')
                 ->orWhere('email', 'like', '%' . $this->search . '%');
         })
+        ->latest() //mengurutkan secara descending, data terbaru berada di atas
         ->paginate(10);
 
         return view('livewire.industri.index', [

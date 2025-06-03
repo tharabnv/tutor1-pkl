@@ -17,8 +17,8 @@ class check_user_role
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && !Auth::user()->hasRole('Siswa')) {
-            abort(403, 'USER DOES NOT HAVE RIGHT ROLE');
+        if (Auth::check() && !Auth::user()->hasRole('Siswa')) { //Mengecek apakah user sudah login dan user punya role siswa
+            abort(403, 'USER DOES NOT HAVE RIGHT ROLE'); //akan muncul seperti ini jika user blm dikasih role
         }
 
         return $next($request);

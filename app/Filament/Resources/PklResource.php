@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Exports\PklExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 
 class PklResource extends Resource
 {
@@ -23,8 +25,8 @@ class PklResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     public static function form(Form $form): Form
-    {
-        return $form
+{
+    return $form
         ->schema([
             Forms\Components\Select::make('siswa_id')
                 ->label('Siswa')
@@ -32,21 +34,44 @@ class PklResource extends Resource
                 ->searchable()
                 ->preload()
                 ->required()
-                ->unique(ignoreRecord: true), // penting untuk proses edit
+                ->unique(ignoreRecord: true),
+
             Forms\Components\Select::make('industri_id')
                 ->relationship('industri', 'nama')
                 ->searchable()
                 ->preload()
                 ->required(),
+
             Forms\Components\Select::make('guru_id')
                 ->relationship('guru', 'nama')
                 ->required(),
+
             Forms\Components\DatePicker::make('mulai')
                 ->required(),
+
             Forms\Components\DatePicker::make('selesai')
-                ->required(),
-            ]);
-    }
+                ->required()
+                ->after('mulai')
+                ->rules([
+                    function (Get $get) {
+                        return function (string $attribute, $value, \Closure $fail) use ($get) {
+                            $mulai = $get('mulai');
+                            $selesai = $value;
+
+                            if ($mulai && $selesai) {
+                                $start = \Carbon\Carbon::parse($mulai);
+                                $end = \Carbon\Carbon::parse($selesai);
+                                $durasi = $start->diffInDays($end);
+
+                                if ($durasi < 90) {
+                                    $fail('Durasi PKL minimal 90 hari. Saat ini hanya '.$durasi.' hari.');
+                                }
+                            }
+                        };
+                    }
+                ]),
+        ]);
+}
 
     public static function table(Table $table): Table
     {

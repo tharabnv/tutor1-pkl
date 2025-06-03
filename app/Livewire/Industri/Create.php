@@ -37,7 +37,7 @@ class Create extends Component
             'alamat'      => 'required|string',
             'kontak'      => 'required|regex:/^[0-9+\-()]*$/|max:20',
             'email'       => 'required|email|max:100',
-            'website'     => 'nullable|url|max:255',
+            'website'     => 'nullable|string|max:255',
         ];
     }
 

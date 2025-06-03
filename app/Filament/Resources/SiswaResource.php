@@ -149,7 +149,31 @@ class SiswaResource extends Resource
                             ->send();
                     }
                 }),
-            ]);
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\BulkAction::make('delete')
+                    ->label('Delete selected')
+                    ->icon('heroicon-o-trash')
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->action(function ($records) {
+                        $deletedCount = 0;
+
+                        foreach ($records as $siswa) {
+                            if (!$siswa->pkl()->exists()) {
+                                $siswa->delete();
+                                $deletedCount++;
+                            }
+                        }
+
+                        Notification::make()
+                            ->title("Berhasil menghapus $deletedCount siswa.")
+                            ->success()
+                            ->send();
+                    }),
+            ]),
+        ]);
     }
 
     public static function getPages(): array

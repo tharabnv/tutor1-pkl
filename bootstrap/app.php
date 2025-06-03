@@ -13,10 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-        'role'=>\Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission'=>\Spatie\Permission\Middleware\PermissionMiddleware::class,
-        'role_or_permission'=>\Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-        'check_user_role'=>\App\Http\Middleware\check_user_role::class,            
+        'role'=>\Spatie\Permission\Middleware\RoleMiddleware::class, //Cek apakah user punya role tertentu
+        'permission'=>\Spatie\Permission\Middleware\PermissionMiddleware::class, //Cek apakah user punya permission tertentu.
+        'role_or_permission'=>\Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class, //User boleh lanjut kalau punya role atau permission tertentu.
+        'check_user_role'=>\App\Http\Middleware\check_user_role::class, //ngecek kondisi role user lebih spesifik
     ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -12,7 +12,7 @@
       </form>
 
       <a href="{{ route('industri.create') }}" 
-         class="bg-green-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+         class="bg-green-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">
          Tambah Industri
       </a>
     </div>
@@ -41,8 +41,12 @@
             <td class="px-3 py-2 border-b whitespace-nowrap">{{ $industri->kontak }}</td>
             <td class="px-3 py-2 border-b">{{ $industri->email }}</td>
             <td class="px-3 py-2 border-b max-w-[180px] truncate">
-              <a href="{{ $industri->website }}" target="_blank" class="text-blue-600 underline">
-                {{ $industri->website }}
+              <a
+                  href="{{ Str::startsWith($industri->website, ['http://', 'https://']) ? $industri->website : 'https://' . $industri->website }}"
+                  target="_blank"
+                  class="text-blue-600 hover:underline"
+              >
+                  {{ $industri->website }}
               </a>
             </td>
           </tr>
@@ -61,6 +65,5 @@
         {{ $industris->links() }}
       </div>
     </div>
-
   </div>
 </div>

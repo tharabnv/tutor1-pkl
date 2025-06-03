@@ -64,7 +64,7 @@ class Index extends Component
                     });
                 });
             })
-            ->latest()
+            ->latest() //mengurutkan secara descending, data terbaru berada di atas
             ->paginate(10);
 
         return view('livewire.pkl.index', compact('pkls'));
