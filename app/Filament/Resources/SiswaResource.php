@@ -31,31 +31,48 @@ class SiswaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required()
+                    ->placeholder('Contoh: Jason Statham') // placeholder saat input
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('nis')
                     ->required()
+                    ->placeholder('Contoh: 12345') // placeholder saat input
                     ->maxLength(255),
+
                     Forms\Components\Select::make('gender')
                     ->required()
                     ->options([
                         'L' => 'Laki-laki',
                         'P' => 'Perempuan',
                     ]),
+
                 Forms\Components\TextInput::make('alamat')
                     ->required()
+                    ->placeholder('Contoh: Jalan Alpukat No. 54') // placeholder saat input
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('kontak')
                     ->required()
                     ->maxLength(20) // batas input total karakter
+                    ->placeholder('Contoh: 81234567890') // placeholder saat input
+                    ->helperText('Masukkan nomor tanpa 0 di depan.')
                     ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
                     ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
-                    ->label('Kontak'),  
+                    ->label('Kontak')
+                    ->prefix('+62') // tampilan form
+                    ->dehydrateStateUsing(function ($state) {
+                        return '+62' . ltrim($state, '0');
+                    }),
+
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    ->placeholder('Contoh: jason@gmail.com') // placeholder saat input
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 // Forms\Components\Toggle::make('status_pkl')
                 //     ->required(),
+
                 Forms\Components\FileUpload::make('foto')
                     ->image()
                     ->directory('fotosiswa') // folder di storage/app/public/fotosiswa
@@ -75,26 +92,36 @@ class SiswaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+
+                
                 Tables\Columns\TextColumn::make('nis')
                     ->searchable(),
+            
                 Tables\Columns\TextColumn::make('gender'),
+        
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
+        
                 Tables\Columns\TextColumn::make('kontak')
                     ->searchable(),
+    
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                
                 Tables\Columns\IconColumn::make('status_pkl')
                     ->boolean(),
+                
                 Tables\Columns\ImageColumn::make('foto')
                     ->disk('public') //menyimpan sesuai dengan storage:link di disk publik
                     ->height(50) //menampilkan gambar dengan tinggi 50 piksel
                     ->circular()               
                     ->searchable(),
+            
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+        
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -163,12 +190,11 @@ class SiswaResource extends Resource
                         foreach ($records as $siswa) {
                             if (!$siswa->pkl()->exists()) {
                                 $siswa->delete();
-                                $deletedCount++;
                             }
                         }
 
                         Notification::make()
-                            ->title("Berhasil menghapus $deletedCount siswa.")
+                            ->title("Siswa yang sudah melapor PKL tidak bisa dihapus.")
                             ->success()
                             ->send();
                     }),
@@ -187,5 +213,15 @@ class SiswaResource extends Resource
     public static function getNavigationLabel(): string
     {
         return 'Data Siswa'; // get navigation
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Siswa::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info';
     }
 }

@@ -29,31 +29,37 @@ class IndustriResource extends Resource
                 ->label('Nama Industri')
                 ->required()
                 ->maxLength(255)
+                ->placeholder('Masukkan nama industri')
                 // Pake unique built-in Laravel/Filament
                 // ignoreRecord: true supaya saat edit data yang sama tidak kena validasi
                 ->unique(table: Industri::class, column: 'nama', ignoreRecord: true),
 
             Forms\Components\TextInput::make('bidang_usaha')
                 ->required()
+                ->placeholder('Contoh: Teknologi Informasi')
                 ->maxLength(255),
 
             Forms\Components\TextInput::make('alamat')
                 ->required()
+                ->placeholder('Contoh: Jalan Alpukat No. 54')
                 ->maxLength(255),
 
             Forms\Components\TextInput::make('kontak')
                 ->label('Kontak')
                 ->required()
+                ->placeholder('Masukkan kontak industri')
                 ->maxLength(20),
 
             Forms\Components\TextInput::make('email')
                 ->email()
                 ->required()
+                ->placeholder('Masukkan email industri')
                 ->maxLength(255),
 
             Forms\Components\TextInput::make('website')
                 ->label('Website')
                 ->url()
+                ->placeholder('Masukkan website industri')
                 ->nullable()
                 ->maxLength(255),
         ]);
@@ -62,6 +68,7 @@ class IndustriResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
@@ -128,5 +135,16 @@ class IndustriResource extends Resource
     {
         return 'Data Industri'; // get navigation
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Industri::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info'; // bisa 'success', 'warning', 'danger', dll
+    }
+
 
 }

@@ -12,7 +12,7 @@ use App\Livewire\Pkl\Create as PklCreate;
 use App\Models\Siswa;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome-custom');
 });
 
 Route::middleware([

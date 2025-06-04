@@ -51,6 +51,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
@@ -95,5 +96,15 @@ class UserResource extends Resource
         return [
             'index' => Pages\ManageUsers::route('/'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) User::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger'; // bisa 'success', 'warning', 'danger', dll
     }
 }

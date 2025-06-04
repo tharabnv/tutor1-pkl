@@ -9,7 +9,7 @@
         <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-lg p-8 text-white">
             <h1 class="text-3xl md:text-4xl font-extrabold mb-2">Selamat Datang di Dashboard PKL 👋</h1>
             <p class="text-lg md:text-xl font-light">
-                Udah dapet tempat PKL? Langsung laporin di sini, biar datamu tercatat!!
+                Udah dapat tempat PKL? Langsung laporin di sini, biar datamu tercatat!!
             </p>
         </div>
     </div>

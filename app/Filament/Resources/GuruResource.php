@@ -31,28 +31,40 @@ class GuruResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required()
+                    ->placeholder('Contoh: Jason Statham')
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('nip')
                     ->required()
+                    ->unique(ignoreRecord: true)
+                    ->placeholder('Masukkan NIP guru')
                     ->maxLength(255),
-                    Forms\Components\Select::make('gender')
+
+                Forms\Components\Select::make('gender')
                     ->required()
                     ->options([
                         'L' => 'Laki-laki',
                         'P' => 'Perempuan',
                     ]),
+
                 Forms\Components\TextInput::make('alamat')
                     ->required()
+                    ->placeholder('Contoh: Jalan Alpukat No. 54')
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('kontak')
                     ->required()
                     ->maxLength(20) // batas input total karakter
+                    ->placeholder('Contoh: 81234567890') // placeholder saat input
+                    ->helperText('Masukkan nomor tanpa 0 di depan.')
                     ->rule('regex:/^[0-9()+-]+$/') // hanya angka, kurung, plus dan minus
                     ->rule('regex:/[0-9]{10,15}/') // minimal 10 dan maksimal 15 digit angka
-                    ->label('Kontak'),
-                    // ->numeric()
-                    // ->required()
-                    // ->rule('regex:/^[0-9]+$/'),                
+                    ->label('Kontak')
+                    ->prefix('+62') // tampilan form
+                    ->dehydrateStateUsing(function ($state) {
+                        return '+62' . ltrim($state, '0');
+                    }),      
+
                 Forms\Components\TextInput::make('email')
                     ->required()
                     ->email()
@@ -66,22 +78,30 @@ class GuruResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('nip')
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('gender'),
+                
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('kontak')
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -135,5 +155,15 @@ class GuruResource extends Resource
     public static function getNavigationLabel(): string
     {
         return 'Data Guru'; // get navigation
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Guru::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info'; // bisa 'success', 'warning', 'danger', dll
     }
 }

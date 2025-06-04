@@ -76,32 +76,39 @@ class PklResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('siswa.nama')
                     ->numeric()
                     ->sortable()
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('industri.nama')
                     ->numeric()
                     ->sortable()
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('guru.nama')
                     ->label('Guru Pembimbing')
                     ->sortable()
                     ->searchable()
                     ->placeholder('Belum ditentukan'),
+                
                 Tables\Columns\TextColumn::make('mulai')
                     ->date()
                     ->sortable()
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('selesai')
                     ->date()
                     ->sortable()
                     ->searchable(),
+                
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -134,5 +141,15 @@ class PklResource extends Resource
     public static function getNavigationLabel(): string
     {
         return 'Data PKL'; // get navigation
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Pkl::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success'; // bisa 'success', 'warning', 'danger', dll
     }
 }
